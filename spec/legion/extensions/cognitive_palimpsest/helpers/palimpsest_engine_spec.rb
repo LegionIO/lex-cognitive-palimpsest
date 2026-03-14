@@ -126,7 +126,7 @@ RSpec.describe Legion::Extensions::CognitivePalimpsest::Helpers::PalimpsestEngin
 
   describe '#most_rewritten' do
     it 'returns palimpsests sorted by overwrite count descending' do
-      3.times { engine.overwrite(topic: 'many', content: "v#{_1}") }
+      3.times { engine.overwrite(topic: 'many', content: "v#{it}") }
       engine.overwrite(topic: 'few', content: 'v1')
       result = engine.most_rewritten(limit: 2)
       expect(result.first[:topic]).to eq('many')

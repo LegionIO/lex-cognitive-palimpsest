@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'securerandom'
+require 'time'
+
 module Legion
   module Extensions
     module CognitivePalimpsest
@@ -12,13 +15,13 @@ module Legion
 
           def initialize(content:, confidence: DEFAULT_CONFIDENCE, domain: :unknown,
                          version: 1, author: :system)
-            @id           = SecureRandom.uuid
-            @content      = content
-            @confidence   = confidence.to_f.clamp(0.0, 1.0)
-            @domain       = domain
-            @version      = version
-            @author       = author
-            @timestamp    = Time.now.utc
+            @id            = ::SecureRandom.uuid
+            @content       = content
+            @confidence    = confidence.to_f.clamp(0.0, 1.0)
+            @domain        = domain
+            @version       = version
+            @author        = author
+            @timestamp     = ::Time.now.utc
             @superseded_by = nil
           end
 

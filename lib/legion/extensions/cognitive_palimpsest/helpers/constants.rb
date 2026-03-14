@@ -34,11 +34,11 @@ module Legion
           }.freeze
 
           DRIFT_LABELS = {
-            (0.7..)     => :radical,
-            (0.4...0.7) => :major,
-            (0.2...0.4) => :moderate,
+            (0.7..)      => :radical,
+            (0.4...0.7)  => :major,
+            (0.2...0.4)  => :moderate,
             (0.05...0.2) => :minor,
-            (..0.05)    => :stable
+            (..0.05)     => :stable
           }.freeze
 
           def self.label_for(labels_hash, value)

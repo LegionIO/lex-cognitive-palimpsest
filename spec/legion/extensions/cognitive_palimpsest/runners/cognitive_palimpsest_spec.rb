@@ -138,7 +138,7 @@ RSpec.describe Legion::Extensions::CognitivePalimpsest::Runners::CognitivePalimp
 
   describe '#most_rewritten' do
     it 'returns sorted list' do
-      3.times { runner.overwrite_belief(topic: 'hot', content: "v#{_1}") }
+      3.times { runner.overwrite_belief(topic: 'hot', content: "v#{it}") }
       runner.overwrite_belief(topic: 'cold', content: 'v1')
       result = runner.most_rewritten(limit: 2)
       expect(result[:success]).to be true

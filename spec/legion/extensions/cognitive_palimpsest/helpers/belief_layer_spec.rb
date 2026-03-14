@@ -140,7 +140,7 @@ RSpec.describe Legion::Extensions::CognitivePalimpsest::Helpers::BeliefLayer do
     it 'returns expected keys' do
       h = layer.to_h
       expect(h).to include(:id, :content, :confidence, :domain, :version, :author,
-                            :timestamp, :superseded_by, :superseded, :ghost, :label)
+                           :timestamp, :superseded_by, :superseded, :ghost, :label)
     end
 
     it 'rounds confidence to 4 decimal places' do

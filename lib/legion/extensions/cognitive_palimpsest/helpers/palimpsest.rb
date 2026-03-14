@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'securerandom'
+require 'time'
+
 module Legion
   module Extensions
     module CognitivePalimpsest
@@ -11,23 +14,25 @@ module Legion
                       :created_at, :overwrite_count
 
           def initialize(topic:, domain: :unknown)
-            @id               = SecureRandom.uuid
-            @topic            = topic
-            @domain           = domain
-            @current_layer    = nil
+            @id                = ::SecureRandom.uuid
+            @topic             = topic
+            @domain            = domain
+            @current_layer     = nil
             @historical_layers = []
-            @created_at       = Time.now.utc
-            @overwrite_count  = 0
+            @created_at        = ::Time.now.utc
+            @overwrite_count   = 0
+            @version_counter   = 0
           end
 
           def overwrite!(new_content, confidence: DEFAULT_CONFIDENCE, author: :system)
             return false if at_layer_limit?
 
+            @version_counter += 1
             new_layer = BeliefLayer.new(
               content:    new_content,
               confidence: confidence,
               domain:     @domain,
-              version:    next_version,
+              version:    @version_counter,
               author:     author
             )
 
@@ -76,7 +81,7 @@ module Legion
             return 0.0 unless @current_layer && @historical_layers.any?
 
             origin = @historical_layers.first
-            ((@current_layer.confidence - origin.confidence).abs).round(10)
+            (@current_layer.confidence - origin.confidence).abs.round(10)
           end
 
           def drift_label
@@ -89,17 +94,17 @@ module Legion
 
           def to_h
             {
-              id:                  @id,
-              topic:               @topic,
-              domain:              @domain,
-              layer_count:         all_layers.size,
-              overwrite_count:     @overwrite_count,
-              ghost_count:         ghost_layers.size,
+              id:                   @id,
+              topic:                @topic,
+              domain:               @domain,
+              layer_count:          all_layers.size,
+              overwrite_count:      @overwrite_count,
+              ghost_count:          ghost_layers.size,
               restoration_strength: restoration_strength.round(4),
-              belief_drift:        belief_drift.round(4),
-              drift_label:         drift_label,
-              current_layer:       @current_layer&.to_h,
-              created_at:          @created_at.iso8601
+              belief_drift:         belief_drift.round(4),
+              drift_label:          drift_label,
+              current_layer:        @current_layer&.to_h,
+              created_at:           @created_at.iso8601
             }
           end
 
@@ -107,10 +112,6 @@ module Legion
 
           def at_layer_limit?
             all_layers.size >= MAX_LAYERS_PER_TOPIC
-          end
-
-          def next_version
-            @historical_layers.size + 1
           end
         end
       end

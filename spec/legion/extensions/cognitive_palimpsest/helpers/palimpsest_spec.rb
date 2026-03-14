@@ -165,8 +165,8 @@ RSpec.describe Legion::Extensions::CognitivePalimpsest::Helpers::Palimpsest do
     it 'returns expected keys' do
       h = pal.to_h
       expect(h).to include(:id, :topic, :domain, :layer_count, :overwrite_count,
-                            :ghost_count, :restoration_strength, :belief_drift,
-                            :drift_label, :current_layer, :created_at)
+                           :ghost_count, :restoration_strength, :belief_drift,
+                           :drift_label, :current_layer, :created_at)
     end
   end
 end
